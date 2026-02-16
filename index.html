@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hungarian Algorithm and the Assignment Problem</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+    <ul>
+        <h1 class="header">Hungarian Algorithm and the Assignment Problem</h1>
+
+        <img src="images/prof.png" alt="">
+    </ul>
+    </header>
+
+    <h1 class="section-header">Cost Matrix</h1>
+    <p class="section-description"> Solve the assignment problem using the Hungarian algorithm. 
+        Reduce rows and colummns to find a least cost solution!</p>
+
+
+    <div class = "matrix-section">
+        <div id="matrix-controls">
+            <label>Matrix size (1-10): <input type="number" id="matrix-size" min="1" max="10" value="3"></label>
+            <button onclick="createRandomMatrixFromInput()">Random Matrix</button>
+            <button onclick="createEmptyMatrixFromInput()">Empty Matrix</button>
+        </div>
+
+        <div id="matrix-container"></div>
+    </div>    
+
+
+    <div>
+    <button onclick="createRandomMatrix()">Generate Random Matrix</button>
+    <button onclick="createEmptyMatrix()">Create Empty Matrix</button>
+    </div>
+
+    <footer>
+        <p>Created by Christine Tao for ENGRI 1101 SP26</p>
+        <div class = "button"><a href="https://canvas.cornell.edu/courses/84909">Canvas Course Page</a></div>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
