@@ -1,20 +1,25 @@
 let matrix = [];
 let reducedRows = [];
 let reducedCols = [];
+let highlightedRows = [];
+let highlightedCols = [];
 
-// --- DEFAULT 3x3 MATRIX ON LOAD ---
+
 function createDefaultMatrix() {
     const size = 3; // default size
     matrix = Array.from({ length: size }, () =>
         Array.from({ length: size }, () => Math.floor(Math.random() * 20) + 1)
     );
+
+    highlightedRows = new Array(size).fill(false);
+    highlightedCols = new Array(size).fill(false);
     reducedRows = new Array(size).fill(false);
     reducedCols = new Array(size).fill(false);
     renderMatrix();
 }
 
-// --- CREATE MATRIX FROM INPUT FIELD ---
 function createRandomMatrixFromInput() {
+
     const size = Number(document.getElementById("matrix-size").value);
     if (size < 1 || size > 10) {
         alert("Matrix size must be between 1 and 10.");
@@ -23,36 +28,54 @@ function createRandomMatrixFromInput() {
     matrix = Array.from({ length: size }, () =>
         Array.from({ length: size }, () => Math.floor(Math.random() * 20) + 1)
     );
+
+    highlightedRows = new Array(size).fill(false);
+    highlightedCols = new Array(size).fill(false);
     reducedRows = new Array(size).fill(false);
     reducedCols = new Array(size).fill(false);
     renderMatrix();
 }
 
 function createEmptyMatrixFromInput() {
+    highlightedRows = new Array(size).fill(false);
+
     const size = Number(document.getElementById("matrix-size").value);
     if (size < 1 || size > 10) {
         alert("Matrix size must be between 1 and 10.");
         return;
     }
     matrix = Array.from({ length: size }, () => Array.from({ length: size }, () => 0));
+
+    highlightedRows = new Array(size).fill(false);
+    highlightedCols = new Array(size).fill(false);
     reducedRows = new Array(size).fill(false);
     reducedCols = new Array(size).fill(false);
     renderMatrix();
 }
 
-// --- RENDER MATRIX ---
 function renderMatrix() {
     const container = document.getElementById("matrix-container");
     container.innerHTML = "";
 
     const table = document.createElement("table");
 
+    const headerRow = document.createElement("tr");
+
+
     for (let i = 0; i < matrix.length; i++) {
         const row = document.createElement("tr");
 
-        // Matrix cells
+        if (highlightedRows[i]) {
+            row.style.backgroundColor = "#fff3b0"; 
+        }
+
+
         for (let j = 0; j < matrix[i].length; j++) {
             const cell = document.createElement("td");
+            if (highlightedCols[j]) {
+            cell.style.backgroundColor = "#cce5ff"; 
+            }
+
             const input = document.createElement("input");
             input.value = matrix[i][j];
             input.onchange = () => matrix[i][j] = Number(input.value);
@@ -60,7 +83,6 @@ function renderMatrix() {
             row.appendChild(cell);
         }
 
-        // Row reduction input
         const reductionCell = document.createElement("td");
         const reductionInput = document.createElement("input");
         reductionInput.placeholder = "Row min";
@@ -69,7 +91,6 @@ function renderMatrix() {
         reductionCell.appendChild(reductionInput);
         row.appendChild(reductionCell);
 
-        // Row reduction button
         const buttonCell = document.createElement("td");
         const button = document.createElement("button");
         button.textContent = "Submit";
@@ -78,10 +99,16 @@ function renderMatrix() {
         buttonCell.appendChild(button);
         row.appendChild(buttonCell);
 
+        const highlightCell = document.createElement("td");
+        const highlightButton = document.createElement("button");
+        highlightButton.textContent = highlightedRows[i] ? "Unhighlight" : "Highlight";
+        highlightButton.onclick = () => toggleRowHighlight(i);
+        highlightCell.appendChild(highlightButton);
+        row.appendChild(highlightCell);
+
         table.appendChild(row);
     }
 
-    // Column reduction row (after all rows reduced)
     if (reducedRows.every(v => v)) {
         const inputRow = document.createElement("tr");
         for (let j = 0; j < matrix[0].length; j++) {
@@ -108,11 +135,22 @@ function renderMatrix() {
         table.appendChild(buttonRow);
     }
 
+    for (let j = 0; j < matrix[0].length; j++) {
+        const headerCell = document.createElement("td");
+        const button = document.createElement("button");
+        button.textContent = highlightedCols[j] ? "Unhighlight" : "Highlight";
+        button.onclick = () => toggleColumnHighlight(j);
+        headerCell.appendChild(button);
+        headerRow.appendChild(headerCell);
+    }
+
+    table.appendChild(headerRow);
+
     container.appendChild(table);
 }
 
-// --- ROW REDUCTION ---
 function applySingleRowReduction(rowIndex) {
+
     if (reducedRows[rowIndex]) return;
 
     const studentValue = Number(document.getElementById(`row-reduction-${rowIndex}`).value);
@@ -128,13 +166,11 @@ function applySingleRowReduction(rowIndex) {
         matrix[rowIndex][j] -= studentValue;
     }
 
-    reducedRows[rowIndex] = true;
-    alert(`Row ${rowIndex + 1} reduced correctly!`);
     renderMatrix();
 }
 
-// --- COLUMN REDUCTION ---
 function applySingleColumnReduction(colIndex) {
+
     if (reducedCols[colIndex]) return;
 
     const studentValue = Number(document.getElementById(`col-reduction-${colIndex}`).value);
@@ -151,10 +187,17 @@ function applySingleColumnReduction(colIndex) {
         matrix[i][colIndex] -= studentValue;
     }
 
-    reducedCols[colIndex] = true;
-    alert(`Column ${colIndex + 1} reduced correctly!`);
     renderMatrix();
 }
 
-// --- ON PAGE LOAD: default 3x3 matrix ---
+function toggleRowHighlight(rowIndex) {
+    highlightedRows[rowIndex] = !highlightedRows[rowIndex];
+    renderMatrix();
+}
+
+function toggleColumnHighlight(colIndex) {
+    highlightedCols[colIndex] = !highlightedCols[colIndex];
+    renderMatrix();
+}
+
 window.onload = createDefaultMatrix;
