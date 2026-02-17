@@ -37,7 +37,6 @@ function createRandomMatrixFromInput() {
 }
 
 function createEmptyMatrixFromInput() {
-    highlightedRows = new Array(size).fill(false);
 
     const size = Number(document.getElementById("matrix-size").value);
     if (size < 1 || size > 10) {
