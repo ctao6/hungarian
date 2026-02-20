@@ -107,9 +107,8 @@ function renderMatrix() {
 
         table.appendChild(row);
     }
-
-    if (reducedRows.every(v => v)) {
-        const inputRow = document.createElement("tr");
+    
+    const inputRow = document.createElement("tr");
         for (let j = 0; j < matrix[0].length; j++) {
             const colCell = document.createElement("td");
             const colInput = document.createElement("input");
@@ -132,7 +131,7 @@ function renderMatrix() {
             buttonRow.appendChild(buttonCell);
         }
         table.appendChild(buttonRow);
-    }
+    
 
     for (let j = 0; j < matrix[0].length; j++) {
         const headerCell = document.createElement("td");
