@@ -6,7 +6,7 @@ let highlightedCols = [];
 
 
 function createDefaultMatrix() {
-    const size = 3; // default size
+    const size = 3; 
     matrix = Array.from({ length: size }, () =>
         Array.from({ length: size }, () => Math.floor(Math.random() * 20) + 1)
     );
